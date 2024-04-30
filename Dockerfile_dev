@@ -18,11 +18,9 @@ WORKDIR /app
 COPY . .
 
 # Ensure that all required files has execute rights
-#RUN chmod +x /app/bin/console \
-#    && chmod +x /app/docker-entrypoint-dev.sh \
-#    && chmod +x /usr/bin/composer
-
-RUN chmod +x /app/docker-entrypoint-dev.sh
+RUN chmod +x /app/bin/console \
+    && chmod +x /app/docker-entrypoint-dev.sh \
+    && chmod +x /usr/bin/composer
 
 EXPOSE 9000
 

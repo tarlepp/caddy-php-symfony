@@ -1,10 +1,10 @@
-FROM php:8.3.6-fpm
+FROM php:8.3.6-fpm-alpine
 
-RUN apt-get update \
-    && apt-get install -y \
+RUN apk update \
+    && apk add --no-cache \
+        bash \
         git \
-        unzip \
-    && rm -rf /var/lib/apt/lists/*
+        unzip
 
 COPY --from=composer:2.7.2 /usr/bin/composer /usr/bin/composer
 

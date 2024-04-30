@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  caddy:
+    image: caddy:2.7-alpine
+    volumes:
+      - ./public:/var/www/html
+      - ./.caddy_data:/data
+      - ./.caddy_config:/config
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./docker/caddy/tls_auto:/etc/tls_auto
+      - ./docker/caddy/tls_selfsigned:/etc/tls_selfsigned
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    env_file:
+      - ./docker/caddy/caddy.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "10"
+
+  php-fpm:
+    build:
+      context: .
+      dockerfile: ./Dockerfile_dev
+    command: php-fpm
+    volumes:
+      - ./:/app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "10"
+
+volumes:
+  dbdata:

@@ -1,0 +1,30 @@
+FROM php:8.3.6-fpm
+
+RUN apt-get update \
+    && apt-get install -y \
+        git \
+        libicu-dev \
+        libxml2-dev \
+        libzip-dev \
+        unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2.7.2 /usr/bin/composer /usr/bin/composer
+
+# Define used work directory
+WORKDIR /app
+
+# Add everything inside docker image
+COPY . .
+
+# Ensure that all required files has execute rights
+#RUN chmod +x /app/bin/console \
+#    && chmod +x /app/docker-entrypoint-dev.sh \
+#    && chmod +x /usr/bin/composer
+
+RUN chmod +x /app/docker-entrypoint-dev.sh
+
+EXPOSE 9000
+
+ENTRYPOINT ["/app/docker-entrypoint-dev.sh"]
+

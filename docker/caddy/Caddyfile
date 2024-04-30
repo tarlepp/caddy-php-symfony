@@ -1,0 +1,25 @@
+{
+    default_sni {$SERVER_NAME}
+}
+
+{$SERVER_NAME} {
+    import /etc/{$TLS_MODE}
+    root * /var/www/html
+    encode zstd gzip
+
+    php_fastcgi php-fpm:9000 {
+        # PHP files location on the PHP server
+        root /app/public
+    }
+
+    file_server
+
+    log {
+        output file /var/log/caddy.log
+    }
+
+    header / {
+      X-Frame-Options "SAMEORIGIN"
+      X-Content-Type-Options "nosniff"
+    }
+}
